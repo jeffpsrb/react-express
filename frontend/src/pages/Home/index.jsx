@@ -22,6 +22,37 @@ const Home = () => {
       console.error('Error fetching products', error)
     })
   }, []);
+
+  const handleDelete = (id) => {
+    fetch(`http://localhost:3000/api/v2/products/${id}`, {
+      method: 'DELETE'
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        fetchProducts();
+    })
+    .catch((error) => {
+      console.error('Error deleting product:', error);
+    });
+  };
+
+  const fetchProducts = () => {
+    fetch('http://localhost:3000/api/v1/products', {
+      method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache',
+        'Pragma': 'no-cache'
+      }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('products:', data)
+      setProducts(data)
+    })
+    .catch((error) => {
+      console.error('Error fetching products', error)
+    })
+  };
   return(
     <div className="main">
       <Link to="/tambah" className="btn btn-primary">Tamah Produk</Link>
@@ -46,8 +77,8 @@ const Home = () => {
               <td className="text-center">
                 <Link to={`/detail/${product._id}`} className='btn btn-sm btn-info'>Detail</Link>
                 <Link to={`/edit/${product._id}`} className='btn btn-sm btn-warning'>Edit</Link>
-                <button className="btn btn-sm btn-danger">Delete</button>
-              </td>
+                <button onClick={() => handleDelete(product._id)} className="btn btn-sm btn-danger">Delete</button>
+                </td>
             </tr>
           ))}
         </tbody>

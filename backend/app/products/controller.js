@@ -58,29 +58,29 @@ const update = async (req, res) => {
 }
 
 const destroy = async (req, res) => {
-    const productName = req.params.name;
-
+    const { id } = req.params;
+  
     try {
-        const result = await Product.deleteOne({ name: productName });
-        
-        if (result.deletedCount === 0) {
-            return res.status(404).json({
-                success: false,
-                message: 'Product not found'
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            message: 'Product deleted successfully'
+      const result = await Product.deleteOne({ _id: id });
+  
+      if (result.deletedCount === 0) {
+        return res.status(404).json({
+          success: false,
+          message: 'Product not found'
         });
+      }
+  
+      res.status(200).json({
+        success: true,
+        message: 'Product deleted successfully'
+      });
     } catch (e) {
-        res.status(500).json({
-            success: false,
-            error: e.message
-        });
+      res.status(500).json({
+        success: false,
+        error: e.message
+      });
     }
-};
+  };
 
 
 module.exports = {
